@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import '../config/app_config.dart';
 import '../network/auth_interceptor.dart';
 import '../network/dio_client.dart';
 import '../../data/datasources/auth_remote_data_source.dart';
+import '../../data/datasources/mock_auth_remote_data_source.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/repositories/i_auth_repository.dart';
 import '../../domain/usecases/login_usecase.dart';
@@ -24,7 +26,9 @@ class ServiceLocator {
 
     // --- Data Sources ---
     getIt.registerLazySingleton<AuthRemoteDataSource>(
-      () => AuthRemoteDataSource(getIt<DioClient>()),
+      () => AppConfig.instance.useMockData
+          ? MockAuthRemoteDataSource()
+          : AuthRemoteDataSource(getIt<DioClient>()),
     );
 
     // --- Repositories ---

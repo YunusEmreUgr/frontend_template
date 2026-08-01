@@ -5,6 +5,7 @@ class AppConfig {
   final String apiBaseUrl;
   final String appTitle;
   final bool enableLogging;
+  final bool useMockData;
   final Duration connectTimeout;
   final Duration receiveTimeout;
 
@@ -15,11 +16,12 @@ class AppConfig {
     required this.apiBaseUrl,
     required this.appTitle,
     required this.enableLogging,
+    this.useMockData = false,
     required this.connectTimeout,
     required this.receiveTimeout,
   });
 
-  static void init({required AppEnvironment environment}) {
+  static void init({required AppEnvironment environment, bool useMockData = false}) {
     switch (environment) {
       case AppEnvironment.dev:
         _instance = AppConfig._internal(
@@ -27,6 +29,7 @@ class AppConfig {
           apiBaseUrl: 'https://localhost:7089/api/v1',
           appTitle: 'Enterprise App (Dev)',
           enableLogging: true,
+          useMockData: useMockData,
           connectTimeout: const Duration(seconds: 30),
           receiveTimeout: const Duration(seconds: 30),
         );
@@ -37,6 +40,7 @@ class AppConfig {
           apiBaseUrl: 'https://staging-api.enterprise.com/api/v1',
           appTitle: 'Enterprise App (Staging)',
           enableLogging: true,
+          useMockData: useMockData,
           connectTimeout: const Duration(seconds: 15),
           receiveTimeout: const Duration(seconds: 15),
         );
@@ -47,6 +51,7 @@ class AppConfig {
           apiBaseUrl: 'https://api.enterprise.com/api/v1',
           appTitle: 'Enterprise App',
           enableLogging: false,
+          useMockData: false,
           connectTimeout: const Duration(seconds: 10),
           receiveTimeout: const Duration(seconds: 10),
         );
@@ -60,3 +65,4 @@ class AppConfig {
   static bool get isStaging => _instance.environment == AppEnvironment.staging;
   static bool get isProd => _instance.environment == AppEnvironment.prod;
 }
+
