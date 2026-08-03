@@ -6,6 +6,7 @@ class CustomTextField extends StatefulWidget {
   final String? hint;
   final IconData? prefixIcon;
   final bool isPassword;
+  final int maxLines;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final FocusNode? focusNode;
@@ -18,6 +19,7 @@ class CustomTextField extends StatefulWidget {
     this.hint,
     this.prefixIcon,
     this.isPassword = false,
+    this.maxLines = 1,
     this.keyboardType = TextInputType.text,
     this.validator,
     this.focusNode,
@@ -48,6 +50,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         TextFormField(
           controller: widget.controller,
           obscureText: widget.isPassword ? _obscureText : false,
+          maxLines: widget.isPassword ? 1 : widget.maxLines,
           keyboardType: widget.keyboardType,
           validator: widget.validator,
           focusNode: widget.focusNode,

@@ -18,10 +18,12 @@ class TokenModel {
     if (json.containsKey('accessToken')) {
       final acc = json['accessToken'];
       if (acc is Map) {
-        access = acc['token']?.toString() ?? '';
+        access = acc['token']?.toString() ?? acc['accessToken']?.toString() ?? '';
       } else {
         access = acc.toString();
       }
+    } else if (json.containsKey('token')) {
+      access = json['token'].toString();
     }
 
     if (json.containsKey('refreshToken')) {

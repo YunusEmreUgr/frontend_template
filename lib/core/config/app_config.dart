@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 enum AppEnvironment { dev, staging, prod }
 
 class AppConfig {
@@ -24,9 +26,15 @@ class AppConfig {
   static void init({required AppEnvironment environment, bool useMockData = false}) {
     switch (environment) {
       case AppEnvironment.dev:
+        final defaultDevUrl = kIsWeb
+            ? 'http://localhost:5212/api/v1'
+            : (defaultTargetPlatform == TargetPlatform.android
+                ? 'http://10.0.2.2:5212/api/v1'
+                : 'http://localhost:5212/api/v1');
+
         _instance = AppConfig._internal(
           environment: AppEnvironment.dev,
-          apiBaseUrl: 'https://localhost:7089/api/v1',
+          apiBaseUrl: defaultDevUrl,
           appTitle: 'Enterprise App (Dev)',
           enableLogging: true,
           useMockData: useMockData,

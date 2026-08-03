@@ -7,12 +7,14 @@ import 'core/localization/locale_provider.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_provider.dart';
 import 'presentation/providers/auth_provider.dart';
+import 'presentation/providers/product_provider.dart';
+import 'presentation/providers/user_provider.dart';
 import 'presentation/navigation/app_router.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  await AppInitializer.init(navigatorKey);
+  await AppInitializer.init(navigatorKey, useMockData: false);
 
   runApp(
     MultiProvider(
@@ -20,6 +22,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LocaleProvider()),
         ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
       ],
       child: const EnterpriseApp(),
     ),

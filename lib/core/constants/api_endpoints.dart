@@ -1,6 +1,8 @@
+import '../config/app_config.dart';
+
 abstract class ApiEndpoints {
-  // Base URL (Development / Production)
-  static const String baseUrl = 'http://localhost:5000/api';
+  // Base URL (Dynamic per environment & platform)
+  static String get baseUrl => AppConfig.instance.apiBaseUrl;
 
   // Auth Endpoints
   static const String login = '/auth/login';

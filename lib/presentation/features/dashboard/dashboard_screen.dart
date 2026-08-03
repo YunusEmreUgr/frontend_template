@@ -147,6 +147,21 @@ class DashboardScreen extends StatelessWidget {
                 Expanded(
                   child: CustomCard(
                     onTap: () {
+                      Navigator.pushNamed(context, '/products');
+                    },
+                    child: Column(
+                      children: [
+                        Icon(Icons.inventory_2_outlined, size: 32, color: theme.primaryColor),
+                        const SizedBox(height: 8),
+                        const Text('Ürün Kataloğu'),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: CustomCard(
+                    onTap: () {
                       Navigator.pushNamed(context, '/profile');
                     },
                     child: Column(
