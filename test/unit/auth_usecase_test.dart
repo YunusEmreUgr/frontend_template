@@ -38,6 +38,28 @@ class FakeAuthRepository implements IAuthRepository {
   }
 
   @override
+  Future<ApiResult<TokenEntity>> googleLogin(String idToken, {String? firstName, String? lastName}) async {
+    return ApiResult.success(const TokenEntity(
+      accessToken: 'fake_access_token',
+      refreshToken: 'fake_refresh_token',
+    ));
+  }
+
+  @override
+  Future<ApiResult<TokenEntity>> appleLogin({
+    required String identityToken,
+    String? authorizationCode,
+    String? givenName,
+    String? familyName,
+    String? email,
+  }) async {
+    return ApiResult.success(const TokenEntity(
+      accessToken: 'fake_access_token',
+      refreshToken: 'fake_refresh_token',
+    ));
+  }
+
+  @override
   Future<void> logout() async {}
 }
 

@@ -45,4 +45,16 @@ class UserRepositoryImpl implements IUserRepository {
       return ApiResult.failure(ServerFailure(message: 'Şifre değiştirilirken hata oluştu.'));
     }
   }
+
+  @override
+  Future<ApiResult<bool>> deleteAccount() async {
+    try {
+      final success = await _remoteDataSource.deleteAccount();
+      return ApiResult.success(success);
+    } on ApiException catch (e) {
+      return ApiResult.failure(ServerFailure(message: e.message, code: e.errorCode));
+    } catch (e) {
+      return ApiResult.failure(ServerFailure(message: 'Hesap silinirken hata oluştu.'));
+    }
+  }
 }

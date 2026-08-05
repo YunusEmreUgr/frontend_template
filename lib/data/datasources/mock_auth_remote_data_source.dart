@@ -38,4 +38,30 @@ class MockAuthRemoteDataSource implements AuthRemoteDataSource {
     await Future.delayed(const Duration(milliseconds: 400));
     return ['Admin', 'User', 'EnterpriseDeveloper'];
   }
+
+  @override
+  Future<TokenModel> googleLogin(String idToken, {String? firstName, String? lastName}) async {
+    await Future.delayed(const Duration(milliseconds: 800));
+    return TokenModel(
+      accessToken: _mockAccessToken,
+      refreshToken: 'mock-refresh-token-12345',
+      expiration: '2030-12-31T23:59:59Z',
+    );
+  }
+
+  @override
+  Future<TokenModel> appleLogin({
+    required String identityToken,
+    String? authorizationCode,
+    String? givenName,
+    String? familyName,
+    String? email,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 800));
+    return TokenModel(
+      accessToken: _mockAccessToken,
+      refreshToken: 'mock-refresh-token-12345',
+      expiration: '2030-12-31T23:59:59Z',
+    );
+  }
 }

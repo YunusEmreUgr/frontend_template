@@ -88,6 +88,50 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   @override
+  Future<ApiResult<TokenEntity>> googleLogin(String idToken, {String? firstName, String? lastName}) async {
+    try {
+      final tokenModel = await _remoteDataSource.googleLogin(idToken, firstName: firstName, lastName: lastName);
+      await TokenStorage.saveTokens(
+        accessToken: tokenModel.accessToken,
+        refreshToken: tokenModel.refreshToken,
+      );
+      return ApiResult.success(tokenModel.toEntity());
+    } on ApiException catch (e) {
+      return ApiResult.failure(ServerFailure(message: e.message, code: e.errorCode));
+    } catch (e) {
+      return ApiResult.failure(ServerFailure(message: 'Google ile giriş yapılırken bir hata oluştu.'));
+    }
+  }
+
+  @override
+  Future<ApiResult<TokenEntity>> appleLogin({
+    required String identityToken,
+    String? authorizationCode,
+    String? givenName,
+    String? familyName,
+    String? email,
+  }) async {
+    try {
+      final tokenModel = await _remoteDataSource.appleLogin(
+        identityToken: identityToken,
+        authorizationCode: authorizationCode,
+        givenName: givenName,
+        familyName: familyName,
+        email: email,
+      );
+      await TokenStorage.saveTokens(
+        accessToken: tokenModel.accessToken,
+        refreshToken: tokenModel.refreshToken,
+      );
+      return ApiResult.success(tokenModel.toEntity());
+    } on ApiException catch (e) {
+      return ApiResult.failure(ServerFailure(message: e.message, code: e.errorCode));
+    } catch (e) {
+      return ApiResult.failure(ServerFailure(message: 'Apple ile giriş yapılırken bir hata oluştu.'));
+    }
+  }
+
+  @override
   Future<void> logout() async {
     await TokenStorage.clearTokens();
   }

@@ -115,7 +115,52 @@ class _LoginScreenState extends State<LoginScreen> {
                     isLoading: authProvider.isLoading,
                     onPressed: _handleLogin,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      const Expanded(child: Divider()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'veya',
+                          style: TextStyle(
+                            color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.5),
+                          ),
+                        ),
+                      ),
+                      const Expanded(child: Divider()),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  OutlinedButton.icon(
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      side: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
+                    ),
+                    icon: const Icon(Icons.g_mobiledata, color: Colors.red, size: 24),
+                    label: const Text(
+                      'Google ile Devam Et',
+                      style: TextStyle(color: Colors.black87, fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () => _handleSocialLogin('Google'),
+                  ),
+                  const SizedBox(height: 12),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    icon: const Icon(Icons.apple, color: Colors.white, size: 22),
+                    label: const Text(
+                      'Apple ile Devam Et',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    onPressed: () => _handleSocialLogin('Apple'),
+                  ),
+                  const SizedBox(height: 24),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -135,5 +180,34 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _handleSocialLogin(String provider) async {
+    final authProvider = context.read<AuthProvider>();
+    
+    final success = provider == 'Google'
+        ? await authProvider.loginWithGoogle(
+            'mock-google-id-token-12345',
+            firstName: 'Demo',
+            lastName: 'GoogleUser',
+          )
+        : await authProvider.loginWithApple(
+            identityToken: 'mock-apple-identity-token-12345',
+            givenName: 'Demo',
+            familyName: 'AppleUser',
+            email: 'demo@apple.com',
+          );
+
+    if (!mounted) return;
+
+    if (success) {
+      AppSnackBar.showSuccess(context, '$provider ile giriş başarılı!');
+      Navigator.pushReplacementNamed(context, '/dashboard');
+    } else {
+      AppSnackBar.showError(
+        context,
+        authProvider.errorMessage ?? '$provider ile giriş başarısız.',
+      );
+    }
   }
 }

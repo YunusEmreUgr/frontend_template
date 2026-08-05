@@ -35,4 +35,10 @@ class UserRemoteDataSource {
     final success = response['success'];
     return success == true || success?.toString() == 'true';
   }
+
+  Future<bool> deleteAccount() async {
+    final response = await _dioClient.delete('/users/account');
+    final success = response['success'];
+    return success == true || success?.toString() == 'true';
+  }
 }

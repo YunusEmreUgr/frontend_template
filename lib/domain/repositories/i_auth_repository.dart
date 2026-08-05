@@ -10,5 +10,13 @@ abstract class IAuthRepository {
     required String password,
   });
   Future<ApiResult<List<String>>> getUserClaims();
+  Future<ApiResult<TokenEntity>> googleLogin(String idToken, {String? firstName, String? lastName});
+  Future<ApiResult<TokenEntity>> appleLogin({
+    required String identityToken,
+    String? authorizationCode,
+    String? givenName,
+    String? familyName,
+    String? email,
+  });
   Future<void> logout();
 }

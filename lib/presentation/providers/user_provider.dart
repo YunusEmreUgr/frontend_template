@@ -4,6 +4,7 @@ import '../../data/models/user/user_model.dart';
 import '../../domain/usecases/user/get_user_profile_usecase.dart';
 import '../../domain/usecases/user/update_user_profile_usecase.dart';
 import '../../domain/usecases/user/change_password_usecase.dart';
+import '../../domain/usecases/user/delete_account_usecase.dart';
 
 enum UserState { initial, loading, loaded, error }
 
@@ -11,6 +12,7 @@ class UserProvider extends ChangeNotifier {
   final GetUserProfileUseCase _getUserProfileUseCase = getIt<GetUserProfileUseCase>();
   final UpdateUserProfileUseCase _updateUserProfileUseCase = getIt<UpdateUserProfileUseCase>();
   final ChangePasswordUseCase _changePasswordUseCase = getIt<ChangePasswordUseCase>();
+  final DeleteAccountUseCase _deleteAccountUseCase = getIt<DeleteAccountUseCase>();
 
   UserState _state = UserState.initial;
   UserModel? _profile;
@@ -55,6 +57,24 @@ class UserProvider extends ChangeNotifier {
       return true;
     } else {
       _errorMessage = result.failureOrNull?.message ?? 'Şifre değiştirilemedi.';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deleteAccount() async {
+    _state = UserState.loading;
+    notifyListeners();
+
+    final result = await _deleteAccountUseCase();
+    if (result.isSuccess) {
+      _profile = null;
+      _state = UserState.initial;
+      notifyListeners();
+      return true;
+    } else {
+      _state = UserState.error;
+      _errorMessage = result.failureOrNull?.message ?? 'Hesap silinemedi.';
       notifyListeners();
       return false;
     }

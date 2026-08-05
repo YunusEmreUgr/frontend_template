@@ -9,6 +9,7 @@ import 'core/theme/theme_provider.dart';
 import 'presentation/providers/auth_provider.dart';
 import 'presentation/providers/product_provider.dart';
 import 'presentation/providers/user_provider.dart';
+import 'presentation/providers/subscription_provider.dart';
 import 'presentation/navigation/app_router.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -24,6 +25,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => SubscriptionProvider()),
       ],
       child: const EnterpriseApp(),
     ),

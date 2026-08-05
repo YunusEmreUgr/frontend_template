@@ -5,4 +5,5 @@ abstract class IUserRepository {
   Future<ApiResult<UserModel>> getProfile();
   Future<ApiResult<bool>> updateProfile(String firstName, String lastName);
   Future<ApiResult<bool>> changePassword(String currentPassword, String newPassword);
+  Future<ApiResult<bool>> deleteAccount();
 }

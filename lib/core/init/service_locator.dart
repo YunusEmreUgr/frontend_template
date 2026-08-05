@@ -22,6 +22,14 @@ import '../../domain/usecases/product/add_product_usecase.dart';
 import '../../domain/usecases/user/get_user_profile_usecase.dart';
 import '../../domain/usecases/user/update_user_profile_usecase.dart';
 import '../../domain/usecases/user/change_password_usecase.dart';
+import '../../domain/usecases/user/delete_account_usecase.dart';
+import '../../domain/usecases/auth/google_login_usecase.dart';
+import '../../domain/usecases/auth/apple_login_usecase.dart';
+import '../../data/datasources/subscription_remote_data_source.dart';
+import '../../domain/repositories/i_subscription_repository.dart';
+import '../../data/repositories/subscription_repository_impl.dart';
+import '../../domain/usecases/subscription/verify_receipt_usecase.dart';
+import '../../domain/usecases/subscription/get_subscription_status_usecase.dart';
 
 final getIt = GetIt.instance;
 
@@ -47,6 +55,9 @@ class ServiceLocator {
     getIt.registerLazySingleton<UserRemoteDataSource>(
       () => UserRemoteDataSource(getIt<DioClient>()),
     );
+    getIt.registerLazySingleton<SubscriptionRemoteDataSource>(
+      () => SubscriptionRemoteDataSource(getIt<DioClient>()),
+    );
 
     // --- Repositories ---
     getIt.registerLazySingleton<IAuthRepository>(
@@ -57,6 +68,9 @@ class ServiceLocator {
     );
     getIt.registerLazySingleton<IUserRepository>(
       () => UserRepositoryImpl(getIt<UserRemoteDataSource>()),
+    );
+    getIt.registerLazySingleton<ISubscriptionRepository>(
+      () => SubscriptionRepositoryImpl(getIt<SubscriptionRemoteDataSource>()),
     );
 
     // --- Use Cases ---
@@ -72,6 +86,12 @@ class ServiceLocator {
     getIt.registerLazySingleton<LogoutUseCase>(
       () => LogoutUseCase(getIt<IAuthRepository>()),
     );
+    getIt.registerLazySingleton<GoogleLoginUseCase>(
+      () => GoogleLoginUseCase(getIt<IAuthRepository>()),
+    );
+    getIt.registerLazySingleton<AppleLoginUseCase>(
+      () => AppleLoginUseCase(getIt<IAuthRepository>()),
+    );
     getIt.registerLazySingleton<GetProductsUseCase>(
       () => GetProductsUseCase(getIt<IProductRepository>()),
     );
@@ -86,6 +106,15 @@ class ServiceLocator {
     );
     getIt.registerLazySingleton<ChangePasswordUseCase>(
       () => ChangePasswordUseCase(getIt<IUserRepository>()),
+    );
+    getIt.registerLazySingleton<DeleteAccountUseCase>(
+      () => DeleteAccountUseCase(getIt<IUserRepository>()),
+    );
+    getIt.registerLazySingleton<VerifyReceiptUseCase>(
+      () => VerifyReceiptUseCase(getIt<ISubscriptionRepository>()),
+    );
+    getIt.registerLazySingleton<GetSubscriptionStatusUseCase>(
+      () => GetSubscriptionStatusUseCase(getIt<ISubscriptionRepository>()),
     );
   }
 

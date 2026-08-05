@@ -37,4 +37,38 @@ class AuthRemoteDataSource {
     }
     return [];
   }
+
+  Future<TokenModel> googleLogin(String idToken, {String? firstName, String? lastName}) async {
+    final response = await _dioClient.post(
+      '/auth/google-login',
+      data: {
+        'idToken': idToken,
+        'firstName': firstName,
+        'lastName': lastName,
+      },
+    );
+    final data = response.containsKey('data') ? response['data'] : response;
+    return TokenModel.fromJson(data);
+  }
+
+  Future<TokenModel> appleLogin({
+    required String identityToken,
+    String? authorizationCode,
+    String? givenName,
+    String? familyName,
+    String? email,
+  }) async {
+    final response = await _dioClient.post(
+      '/auth/apple-login',
+      data: {
+        'identityToken': identityToken,
+        'authorizationCode': authorizationCode,
+        'givenName': givenName,
+        'familyName': familyName,
+        'email': email,
+      },
+    );
+    final data = response.containsKey('data') ? response['data'] : response;
+    return TokenModel.fromJson(data);
+  }
 }
